@@ -1,5 +1,6 @@
 import express from 'express';
 const router = express.Router();
+const logger = require('./../objects/logger');
 
 router.get('/', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
@@ -10,8 +11,9 @@ router.get('/', (req: express.Request, res: express.Response, next: express.Next
             dateTime: (new Date().toLocaleTimeString())
         };
         res.json(result);
-    } catch (e) {
-        res.status(500).json({ statusCode: 500, message: e.message });
+    } catch (err) {
+        logger.log('error', 'Error in GET public/', err);
+        res.status(500).json({ statusCode: 500, message: err.message });
     }
 });
 
@@ -25,8 +27,9 @@ router.post('/', (req: express.Request, res: express.Response, next: express.Nex
             echoedData: req.body
         };
         res.json(result);
-    } catch (e) {
-        res.status(500).json({ statusCode: 500, message: e.message });
+    } catch (err) {
+        logger.log('error', 'Error in POST public/', err);
+        res.status(500).json({ statusCode: 500, message: err.message });
     }
 });
 
@@ -38,10 +41,13 @@ router.get('/generatesError', (req: express.Request, res: express.Response, next
             dotEnvTestValue: process.env.SAMPLE_TEXT,
             dateTime: (new Date().toLocaleTimeString())
         };
+
         throw new Error('Forced error'); // Generate error
+
         res.json(result);
-    } catch (e) {
-        res.status(500).json({ statusCode: 500, message: e.message });
+    } catch (err) {
+        logger.log('error', 'Error in GET public/generatesError', err);
+        res.status(500).json({ statusCode: 500, message: err.message });
     }
 });
 

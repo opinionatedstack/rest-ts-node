@@ -1,5 +1,6 @@
 import express from 'express';
 const router = express.Router();
+const logger = require('./../objects/logger');
 
 const jwtAuthz = require('express-jwt-authz');
 
@@ -12,8 +13,9 @@ router.get('/',  (req: express.Request, res: express.Response, next: express.Nex
             dateTime: (new Date().toLocaleTimeString())
         };
         res.json(result);
-    } catch (e) {
-        res.status(500).json(e);
+    } catch (err) {
+        logger.log('error', 'Error in GET public/generatesError', err);
+        res.status(500).json(err);
     }
 });
 
@@ -27,8 +29,9 @@ router.post('/',  (req: express.Request, res: express.Response, next: express.Ne
             echoedData: req.body
         };
         res.json(result);
-    } catch (e) {
-        res.status(500).json(e);
+    } catch (err) {
+        logger.log('error', 'Error in GET public/generatesError', err);
+        res.status(500).json(err);
     }
 });
 
@@ -43,8 +46,9 @@ router.post('/requireNeverPermission', jwtAuthz([ 'read:never', 'write:never' ])
             echoedData: req.body
         };
         res.json(result);
-    } catch (e) {
-        res.status(500).json(e);
+    } catch (err) {
+        logger.log('error', 'Error in GET public/generatesError', err);
+        res.status(500).json(err);
     }
 });
 
@@ -60,8 +64,9 @@ router.post('/requirePostPermission', jwtAuthz([ 'post:read', 'post:write' ]), (
             echoedData: req.body
         };
         res.json(result);
-    } catch (e) {
-        res.status(500).json(e);
+    } catch (err) {
+        logger.log('error', 'Error in GET public/generatesError', err);
+        res.status(500).json(err);
     }
 });
 

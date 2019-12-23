@@ -69,7 +69,7 @@ module.exports = {
                 const array = await mdbResults.toArray();
                 const count = await mdbResults.count();
 
-                return resolve({totalFound: count, hits: array});
+                return resolve({itemsFound: count, hits: array});
             } catch (err) {
                 return reject (err);
             }

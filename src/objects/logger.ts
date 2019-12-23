@@ -1,6 +1,6 @@
-import express from "express";
-import {Db, MongoClient, MongoClientOptions} from "mongodb";
-import {level} from "winston";
+import express from 'express';
+import {Db, MongoClient, MongoClientOptions} from 'mongodb';
+import {level} from 'winston';
 
 const winston = require('winston');
 const winstonMdb = require('winston-mongodb');

@@ -13,7 +13,7 @@ try {
     mongoDbLogClient.connect()
         .then(async (r: any) => {
             console.log('info', 'Connected correctly to MongoDb server');
-            loggingDb = await mongoDbLogClient.db(process.env.LOGGING_MONGODB_COLLECTION);
+            loggingDb = await mongoDbLogClient.db(process.env.LOGGING_MONGODB_DB);
             console.log('info', 'Connected correctly to MongoDb database: ' + process.env.LOGGING_MONGODB_COLLECTION);
 
             const winstonMongoDbOptions = {

@@ -18,7 +18,7 @@ module.exports = {
                 }
 
                 const options: any = { method: 'GET',
-                    url: process.env.AUTH0_DOMAIN + '/api/v2/users',
+                    url: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/users',
                     qs:
                         {
                             q: query,
@@ -50,7 +50,7 @@ module.exports = {
                 const token: any = await getTokenTMAuth0MgmtAPI();
 
                 var options = { method: 'GET',
-                    url: process.env.AUTH0_DOMAIN + '/api/v2/users/' + req.body.user_id,
+                    url: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/users/' + req.body.user_id,
                     headers: { authorization: 'Bearer ' + token.access_token }
                 };
 
@@ -97,7 +97,7 @@ module.exports = {
                 ('username' in req.body) ? userUpdateBody.username = req.body.username: x = 0;
 
                 var options = { method: 'PATCH',
-                    url: process.env.AUTH0_DOMAIN + '/api/v2/users/' + req.body.user_id,
+                    url: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/users/' + req.body.user_id,
                     body: userUpdateBody,
                     headers: {
                         authorization: 'Bearer ' + token.access_token,
@@ -128,7 +128,7 @@ module.exports = {
                 if (req.body.name_filter) { query_string.name_filter = req.body.name_filter; }
 
                 var options = { method: 'GET',
-                    url: process.env.AUTH0_DOMAIN + '/api/v2/roles',
+                    url: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/roles',
                     headers: { authorization: 'Bearer ' + token.access_token },
                     qs:  query_string
                 };
@@ -158,12 +158,12 @@ function getTokenTMAuth0MgmtAPI() {
 
         var options = {
             method: 'POST',
-            url:  process.env.AUTH0_DOMAIN + '/oauth/token',
+            url:  'https://' + process.env.AUTH0_DOMAIN + '/oauth/token',
             headers: { 'content-type': 'application/json' },
             body: {
                 client_id: process.env.AUTH0_MGMT_APPLICATION_CLIENT_ID,
                 client_secret: process.env.AUTH0_MGMT_APPLICATION_CLIENT_SECRET,
-                audience: process.env.AUTH0_DOMAIN + '/api/v2/',
+                audience: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/',
                 grant_type: "client_credentials"
             },
             json: true

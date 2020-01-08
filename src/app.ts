@@ -17,7 +17,7 @@ const logger = require('morgan');
 const createError = require('http-errors');
 const debug = require('debug')('rest-ts-node');
 
-// Create a new express application instance
+// Create a new express application instance.
 const app: express.Application = express();
 
 app.use(helmet());

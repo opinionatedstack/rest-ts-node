@@ -14,7 +14,7 @@ module.exports = {
 
                 let query: string = '';
                 if (req.body.searchTerms.email) {
-                    query = query + 'email:"' + req.body.searchTerms.email + '";';
+                    query = query + 'email:' + req.body.searchTerms.email + '*';
                 }
 
                 const options: any = { method: 'GET',

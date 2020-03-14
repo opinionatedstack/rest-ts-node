@@ -7,7 +7,10 @@ const winstonMdb = require('winston-mongodb');
 const { format } = winston;
 const { combine, label, json, timestamp, simple, colorize } = format;
 
-const mongoDbLogClient: MongoClient = new MongoClient(process.env.LOGGING_MONGODB_CONNECTION_STRING!, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoDbLogClient: MongoClient = new MongoClient(
+    process.env.LOGGING_MONGODB_CLUSTER_CONN_STRING! + process.env.LOGGING_MONGODB_DB! + process.env.LOGGING_MONDODB_OPTIONS,
+    { useNewUrlParser: true, useUnifiedTopology: true });
+
 let loggingDb: Db;
 try {
     mongoDbLogClient.connect()

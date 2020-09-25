@@ -14,3 +14,9 @@ docker build -t [your docker org]/rest-ts-node:latest -f Dockerfile.prod . && do
 
 # Testing
 The web login application should have grant_type=password
+
+# 
+docker build -t opinionatedstack/rest-ts-node:latest -f Dockerfile.prod .
+docker push opinionatedstack/rest-ts-node:latest
+
+npm run tsc && docker build -t opinionatedstack/rest-ts-node:latest -f Dockerfile.prod . && docker push opinionatedstack/rest-ts-node:latest && say done

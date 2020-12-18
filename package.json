@@ -11,15 +11,14 @@
     "start": "node app.js",
     "bp-prod": "npm run tsc && docker build -t opinionatedstack/rest-ts-node:latest -f Dockerfile.prod . && docker push opinionatedstack/rest-ts-node:latest && say prod rest done",
     "bp-qa": "npm run tsc && docker build -t opinionatedstack/rest-ts-node:latest-qa -f Dockerfile.qa . && docker push opinionatedstack/rest-ts-node:latest-qa && say qa rest done"
-
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.8",
+    "@types/express": "^4.17.9",
     "@types/express-jwt": "0.0.42",
-    "@types/mongodb": "^3.5.27",
-    "@types/node": "^12.12.58",
+    "@types/mongodb": "^3.6.3",
+    "@types/node": "^12.19.9",
     "@types/request": "^2.48.5",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
@@ -31,13 +30,13 @@
     "express-jwt-authz": "^2.4.1",
     "helmet": "^3.23.3",
     "http-errors": "^1.8.0",
-    "jwks-rsa": "^1.9.0",
+    "jwks-rsa": "^1.12.0",
     "morgan": "^1.10.0",
     "path": "^0.12.7",
     "request": "^2.88.2",
-    "ts-node-dev": "^1.0.0-pre.62",
+    "ts-node-dev": "^1.1.1",
     "typescript": "^3.9.7",
     "winston": "^3.3.3",
-    "winston-mongodb": "^5.0.4"
+    "winston-mongodb": "^5.0.5"
   }
 }

@@ -5,7 +5,7 @@ const logger = require('./../objects/logger');
 router.get('/', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
         const result = {
-            status: 'success',
+            status: 200,
             message: 'Sucessful public GET',
             dotEnvTestValue: process.env.SAMPLE_TEXT,
             dateTime: (new Date().toLocaleTimeString())
@@ -20,7 +20,7 @@ router.get('/', (req: express.Request, res: express.Response, next: express.Next
 router.post('/', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
         const result = {
-            status: 'success',
+            status: 200,
             message: 'Successful public POST',
             dotEnvTestValue: process.env.SAMPLE_TEXT,
             dateTime: (new Date().toLocaleTimeString()),
@@ -36,7 +36,7 @@ router.post('/', (req: express.Request, res: express.Response, next: express.Nex
 router.get('/generatesError', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
         const result = {
-            status: 'success',
+            status: 200,
             message: 'This public GET should fail',
             dotEnvTestValue: process.env.SAMPLE_TEXT,
             dateTime: (new Date().toLocaleTimeString())

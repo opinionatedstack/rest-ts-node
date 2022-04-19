@@ -1,16 +1,60 @@
 import express from 'express';
 import request from 'request';
 
-let tokenTMAuth0MgmtAPI: any;
-let tokenTMAuth0MgmtAPIDateTime: any;
-let tokenAuth0AuthExtension: any;
-let tokenAuth0AuthExtensionDateTime: any;
+class Auth0Authentication {
+    tokenTMAuth0MgmtAPI: any;
+    tokenTMAuth0MgmtAPIDateTime: any;
+    tokenAuth0AuthExtension: any;
+    tokenAuth0AuthExtensionDateTime: any;
 
-module.exports = {
-    getUsers: (req: express.Request) => {
+    public getTokenTMAuth0MgmtAPI() {
+        return new Promise( (resolve, reject) => {
+            if (this.tokenTMAuth0MgmtAPI) {
+                if (Date.now() - this.tokenTMAuth0MgmtAPIDateTime < 600000) {
+                    return resolve(this.tokenTMAuth0MgmtAPI);
+                }
+            }
+
+            var options = {
+                method: 'POST',
+                url:  'https://' + process.env.AUTH0_DOMAIN + '/oauth/token',
+                headers: { 'content-type': 'application/json' },
+                body: {
+                    client_id: process.env.AUTH0_MGMT_APPLICATION_CLIENT_ID,
+                    client_secret: process.env.AUTH0_MGMT_APPLICATION_CLIENT_SECRET,
+                    audience: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/',
+                    grant_type: "client_credentials"
+                },
+                json: true
+            };
+
+            request(options, (error: any, response: request.Response, body: any) => {
+                if (error) {
+                    return reject(error);
+                }
+
+                else if ('statusCode' in response && response.statusCode !== 200) {
+                    const e: any = new Error('Auth0 Error: ' + response.body.error_description);
+                    e.data = response.body;
+                    e.statusCode = response.statusCode;
+                    return reject (e);
+                }
+
+                this.tokenTMAuth0MgmtAPIDateTime = Date.now();
+                this.tokenTMAuth0MgmtAPI = body;
+                return resolve(body);
+            });
+        });
+    }
+}
+
+const auth0Authentication = new Auth0Authentication();
+
+export class Auth0 {
+    public static getUsers (req: express.Request) {
         return new Promise (async (resolve, reject) => {
             try {
-                const token: any = await getTokenTMAuth0MgmtAPI();
+                const token: any = await auth0Authentication.getTokenTMAuth0MgmtAPI();
 
                 let query: string = '';
                 if (req.body.searchTerms.email) {
@@ -42,12 +86,12 @@ module.exports = {
                 return reject (error);
             }
         });
-    },
+    }
 
-    getUser: (req: express.Request) => {
+    public static getUser (req: express.Request) {
         return new Promise ( async (resolve, reject) => {
             try {
-                const token: any = await getTokenTMAuth0MgmtAPI();
+                const token: any = await auth0Authentication.getTokenTMAuth0MgmtAPI();
 
                 var options = { method: 'GET',
                     url: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/users/' + req.body.user_id,
@@ -65,12 +109,12 @@ module.exports = {
                 return reject (error);
             }
         });
-    },
+    }
 
-    updateUser: (req: express.Request) => {
+    public static updateUser (req: express.Request) {
         return new Promise ( async (resolve, reject) => {
             try {
-                const token: any = await getTokenTMAuth0MgmtAPI();
+                const token: any = await auth0Authentication.getTokenTMAuth0MgmtAPI();
 
                 // Copy user object into new object with only fields that can be updated per Auth0 Management API
                 // Field list from https://auth0.com/docs/api/management/v2#!/Users/patch_users_by_id
@@ -117,12 +161,12 @@ module.exports = {
                 return reject (error);
             }
         });
-    },
+    }
 
-    getRoles: (req: express.Request) => {
+    public static getRoles (req: express.Request) {
         return new Promise ( async (resolve, reject) => {
             try {
-                const token: any = await getTokenTMAuth0MgmtAPI();
+                const token: any = await auth0Authentication.getTokenTMAuth0MgmtAPI();
 
                 const query_string: any = {per_page: req.body.pageSize, page: req.body.pageIndex, include_totals: true};
                 if (req.body.name_filter) { query_string.name_filter = req.body.name_filter; }
@@ -145,45 +189,5 @@ module.exports = {
                 return reject (error);
             }
         });
-    },
-};
-
-function getTokenTMAuth0MgmtAPI() {
-    return new Promise(function (resolve, reject) {
-        if (tokenTMAuth0MgmtAPI) {
-            if (Date.now() - tokenTMAuth0MgmtAPIDateTime < 600000) {
-                return resolve(tokenTMAuth0MgmtAPI);
-            }
-        }
-
-        var options = {
-            method: 'POST',
-            url:  'https://' + process.env.AUTH0_DOMAIN + '/oauth/token',
-            headers: { 'content-type': 'application/json' },
-            body: {
-                client_id: process.env.AUTH0_MGMT_APPLICATION_CLIENT_ID,
-                client_secret: process.env.AUTH0_MGMT_APPLICATION_CLIENT_SECRET,
-                audience: 'https://' + process.env.AUTH0_DOMAIN + '/api/v2/',
-                grant_type: "client_credentials"
-            },
-            json: true
-        };
-
-        request(options, (error: any, response: request.Response, body: any) => {
-            if (error) {
-                return reject(error);
-            }
-
-            else if ('statusCode' in response && response.statusCode !== 200) {
-                const e: any = new Error('Auth0 Error: ' + response.body.error_description);
-                e.data = response.body;
-                e.statusCode = response.statusCode;
-                return reject (e);
-            }
-
-            tokenTMAuth0MgmtAPIDateTime = Date.now();
-            tokenTMAuth0MgmtAPI = body;
-            return resolve(body);
-        });
-    });
+    }
 }

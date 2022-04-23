@@ -33,7 +33,7 @@ if (process.env.MOCHA_TESTS !== 'true') {
 app.use(cors());
 app.options('*', cors());
 
-import jwt = require('express-jwt');
+let { expressjwt: jwt } = require("express-jwt");
 const jwks = require('jwks-rsa');
 
 const jwtCheck = jwt({
